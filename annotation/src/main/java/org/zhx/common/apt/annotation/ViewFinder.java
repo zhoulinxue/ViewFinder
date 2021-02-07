@@ -11,6 +11,7 @@ public class ViewFinder {
         IViewFinder helper = map.get(className);
         if (helper == null) {
             String helperName = className + Constants.VIEW_SUFIX;
+            System.out.println("!!!!!!!!!!"+helperName);
             try {
                 helper = (IViewFinder) (Class.forName(helperName).getConstructor().newInstance());
                 map.put(className, helper);

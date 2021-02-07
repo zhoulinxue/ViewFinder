@@ -28,7 +28,7 @@ import org.zhx.common.apt.annotation.ViewFinder;
 public class FragmentTest extends Fragment {
     @FindView(id = R.id.hello_tv)
     TextView hello;
-    @FindView(id = R.id.hello_tv2)
+    @FindView(id = R.id.hello_tv2,name="新字符")
     TextView setTv;
 
     @Nullable
@@ -40,8 +40,7 @@ public class FragmentTest extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        ViewFinder.init(this);
-        setTv.setText("设置文字");
-        hello.setText("hello 文字");
+        ViewFinder.init(view);
+        hello.setText("测试内容");
     }
 }
