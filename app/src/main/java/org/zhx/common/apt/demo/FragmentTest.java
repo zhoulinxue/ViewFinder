@@ -40,7 +40,7 @@ public class FragmentTest extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        ViewFinder.init(view);
+        ViewFinder.init(this);
         hello.setText("测试内容");
     }
 }

@@ -24,23 +24,43 @@ import javax.lang.model.element.VariableElement;
 
 @AutoService(Processor.class)
 public class IdProcessor extends BaseProcessor {
-    private String TAG=IdProcessor.class.getSimpleName();
+    private String TAG = IdProcessor.class.getSimpleName();
     private Map<TypeElement, Set<ViewInfo>> mToBindMap = new HashMap<>();
 
     @Override
     protected TypeSpec customProcess(TypeElement enclosingElement, String parent, ClassName targetClass) {
-        System.out.println(TAG);
-        boolean isActivity = parent.contains("Activity") && parent.startsWith("android");
         ClassName iViewFinder = ClassName.get("org.zhx.common.apt.annotation", "IViewFinder");
+
+        ClassName viewClazz = ClassName.get("android.view", "View");
+        ClassName objectClazz = ClassName.get("java.lang", "Object");
         //初始化类
         String className = targetClass.simpleName() + Constants.VIEW_SUFIX;
         // 方法
+
+        MethodSpec.Builder find = MethodSpec.methodBuilder("findView")
+                .addAnnotation(Override.class)
+                .addModifiers(Modifier.PUBLIC)
+                .addParameter(viewClazz, "target");
+
         MethodSpec.Builder bind = MethodSpec.methodBuilder("bind")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
                 .addParameter(targetClass, "target");
+
+        MethodSpec.Builder fragment = MethodSpec.methodBuilder("bind")
+                .addAnnotation(Override.class)
+                .addModifiers(Modifier.PUBLIC)
+                .addParameter(targetClass, "target")
+                .addParameter(objectClazz, "view");
+
+
         for (ViewInfo info : mToBindMap.get(enclosingElement)) {
-            bind.addStatement("target.$N=$N.findViewById($L)", info.viewName, isActivity ? "target" : "target.getView()", info.id);
+            find.addStatement("target.$N=$N.findViewById($L)", info.viewName, "target", info.id);
+
+            bind.addStatement("target.$N=findView($L)", info.viewName, info.id);
+
+            fragment.addStatement("target.$N=findView($L)", info.viewName, "view", info.id);
+
             if (info.valus != null && info.valus.length() > 0) {
                 bind.addStatement("target.$N.setText($S)", info.viewName, info.valus);
             }
@@ -49,6 +69,8 @@ public class IdProcessor extends BaseProcessor {
         TypeSpec.Builder helperClazz = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC)
                 .addSuperinterface(ParameterizedTypeName.get(iViewFinder, targetClass))
+//                .addMethod(find.build())
+//                .addMethod(fragment.build())
                 .addMethod(bind.build());
         return helperClazz.build();
     }
