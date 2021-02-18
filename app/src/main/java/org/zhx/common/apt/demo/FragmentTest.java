@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import org.zhx.common.apt.annotation.FindView;
-import org.zhx.common.apt.annotation.ViewFinder;
 
 /**
  * @ProjectName: demo
@@ -28,7 +27,7 @@ import org.zhx.common.apt.annotation.ViewFinder;
 public class FragmentTest extends Fragment {
     @FindView(id = R.id.hello_tv)
     TextView hello;
-    @FindView(id = R.id.hello_tv2,name="新字符")
+    @FindView(id = R.id.hello_tv2, name = "新字符")
     TextView setTv;
 
     @Nullable
@@ -40,7 +39,7 @@ public class FragmentTest extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        ViewFinder.init(this);
+        ViewFinder.init(this, view);
         hello.setText("测试内容");
     }
 }

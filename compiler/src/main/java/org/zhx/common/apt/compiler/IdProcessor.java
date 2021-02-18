@@ -2,6 +2,7 @@ package org.zhx.common.apt.compiler;
 
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
@@ -29,48 +30,39 @@ public class IdProcessor extends BaseProcessor {
 
     @Override
     protected TypeSpec customProcess(TypeElement enclosingElement, String parent, ClassName targetClass) {
-        ClassName iViewFinder = ClassName.get("org.zhx.common.apt.annotation", "IViewFinder");
-
-        ClassName viewClazz = ClassName.get("android.view", "View");
         ClassName objectClazz = ClassName.get("java.lang", "Object");
+        ClassName viewClazz = ClassName.get("android.view", "View");
+        ClassName activityClazz = ClassName.get("android.app", "Activity");
+
+        ClassName iViewFinder = ClassName.get("org.zhx.common.apt.annotation", "IViewFinder");
+        ClassName targetFinder = ClassName.get("org.zhx.common.apt.annotation", "TargetInfo");
         //初始化类
         String className = targetClass.simpleName() + Constants.VIEW_SUFIX;
         // 方法
-
-        MethodSpec.Builder find = MethodSpec.methodBuilder("findView")
-                .addAnnotation(Override.class)
-                .addModifiers(Modifier.PUBLIC)
-                .addParameter(viewClazz, "target");
-
         MethodSpec.Builder bind = MethodSpec.methodBuilder("bind")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
-                .addParameter(targetClass, "target");
+                .addParameter(targetFinder, "targetInfo")
+                .addStatement("bind((($T)targetInfo.getTarget()),(($T)targetInfo.getView()))", targetClass, viewClazz);
 
-        MethodSpec.Builder fragment = MethodSpec.methodBuilder("bind")
-                .addAnnotation(Override.class)
+        MethodSpec.Builder viewM = MethodSpec.methodBuilder("bind")
                 .addModifiers(Modifier.PUBLIC)
                 .addParameter(targetClass, "target")
-                .addParameter(objectClazz, "view");
+                .addParameter(viewClazz, "view");
 
 
         for (ViewInfo info : mToBindMap.get(enclosingElement)) {
-            find.addStatement("target.$N=$N.findViewById($L)", info.viewName, "target", info.id);
-
-            bind.addStatement("target.$N=findView($L)", info.viewName, info.id);
-
-            fragment.addStatement("target.$N=findView($L)", info.viewName, "view", info.id);
-
+            viewM.addStatement("target.$N=$N.findViewById($L)", info.viewName, "view", info.id);
             if (info.valus != null && info.valus.length() > 0) {
-                bind.addStatement("target.$N.setText($S)", info.viewName, info.valus);
+                viewM.addStatement("target.$N.setText($S)", info.viewName, info.valus);
             }
         }
+
         // 生成的类
         TypeSpec.Builder helperClazz = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC)
-                .addSuperinterface(ParameterizedTypeName.get(iViewFinder, targetClass))
-//                .addMethod(find.build())
-//                .addMethod(fragment.build())
+                .addSuperinterface(iViewFinder)
+                .addMethod(viewM.build())
                 .addMethod(bind.build());
         return helperClazz.build();
     }

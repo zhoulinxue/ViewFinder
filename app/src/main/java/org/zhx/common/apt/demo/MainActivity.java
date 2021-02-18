@@ -4,13 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import org.zhx.common.apt.annotation.FindView;
-import org.zhx.common.apt.annotation.ViewFinder;
 
 public class MainActivity extends AppCompatActivity {
     @FindView(id = R.id.fragment_container)
     FrameLayout layout;
+    @FindView(id = R.id.activity_tv, name = "activity_string")
+    TextView activityTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
