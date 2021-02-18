@@ -30,10 +30,7 @@ public class IdProcessor extends BaseProcessor {
 
     @Override
     protected TypeSpec customProcess(TypeElement enclosingElement, String parent, ClassName targetClass) {
-        ClassName objectClazz = ClassName.get("java.lang", "Object");
         ClassName viewClazz = ClassName.get("android.view", "View");
-        ClassName activityClazz = ClassName.get("android.app", "Activity");
-
         ClassName iViewFinder = ClassName.get("org.zhx.common.apt.annotation", "IViewFinder");
         ClassName targetFinder = ClassName.get("org.zhx.common.apt.annotation", "TargetInfo");
         //初始化类
@@ -57,7 +54,6 @@ public class IdProcessor extends BaseProcessor {
                 viewM.addStatement("target.$N.setText($S)", info.viewName, info.valus);
             }
         }
-
         // 生成的类
         TypeSpec.Builder helperClazz = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC)

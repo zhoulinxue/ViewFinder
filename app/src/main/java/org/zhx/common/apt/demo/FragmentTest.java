@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import org.zhx.common.apt.annotation.FindView;
+import org.zhx.common.binding.ViewFinder;
 
 /**
  * @ProjectName: demo
@@ -39,7 +40,7 @@ public class FragmentTest extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        ViewFinder.init(this, view);
+        ViewFinder.bind(this, view);
         hello.setText("测试内容");
     }
 }
