@@ -12,7 +12,7 @@ import org.zhx.common.binding.ViewFinder;
 public class MainActivity extends AppCompatActivity {
     @FindView(id = R.id.fragment_container)
     FrameLayout layout;
-    @FindView(id = R.id.activity_tv, name = "activity_string")
+    @FindView(id = R.id.activity_tv, content = "activity_string")
     TextView activityTv;
 
     @Override

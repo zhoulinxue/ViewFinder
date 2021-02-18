@@ -28,7 +28,7 @@ import org.zhx.common.binding.ViewFinder;
 public class FragmentTest extends Fragment {
     @FindView(id = R.id.hello_tv)
     TextView hello;
-    @FindView(id = R.id.hello_tv2, name = "新字符")
+    @FindView(id = R.id.hello_tv2, content = "新字符")
     TextView setTv;
 
     @Nullable

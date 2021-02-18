@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 public @interface FindView {
     int id();
 
-    String name() default "";
+    String content() default "";
 }

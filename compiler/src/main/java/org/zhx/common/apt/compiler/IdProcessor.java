@@ -2,9 +2,7 @@ package org.zhx.common.apt.compiler;
 
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import org.zhx.common.apt.annotation.Constants;
@@ -86,7 +84,7 @@ public class IdProcessor extends BaseProcessor {
         }
         FindView bindAnnotation = (FindView) variableElement.getAnnotation(initElementClass());
         int id = bindAnnotation.id();
-        String name = bindAnnotation.name();
+        String name = bindAnnotation.content();
         views.add(new ViewInfo(variableElement.getSimpleName().toString(), id, name));
     }
 
