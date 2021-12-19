@@ -16,10 +16,12 @@ public class ViewInfo {
     public String viewName;
     public int id;
     public String valus;
+    public int src;
 
-    public ViewInfo(String viewName, int id, String valus) {
+    public ViewInfo(String viewName, int id, String valus, int src) {
         this.viewName = viewName;
         this.id = id;
         this.valus = valus;
+        this.src = src;
     }
 }

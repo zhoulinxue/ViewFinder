@@ -50,6 +50,8 @@ public class IdProcessor extends BaseProcessor {
             viewM.addStatement("target.$N=$N.findViewById($L)", info.viewName, "view", info.id);
             if (info.valus != null && info.valus.length() > 0) {
                 viewM.addStatement("target.$N.setText($S)", info.viewName, info.valus);
+            } else if (info.src != 0) {
+                viewM.addStatement("target.$N.setText($L)", info.viewName, info.src);
             }
         }
         // 生成的类
@@ -85,7 +87,8 @@ public class IdProcessor extends BaseProcessor {
         FindView bindAnnotation = (FindView) variableElement.getAnnotation(initElementClass());
         int id = bindAnnotation.id();
         String name = bindAnnotation.content();
-        views.add(new ViewInfo(variableElement.getSimpleName().toString(), id, name));
+        int src = bindAnnotation.src();
+        views.add(new ViewInfo(variableElement.getSimpleName().toString(), id, name, src));
     }
 
 }

@@ -11,4 +11,6 @@ public @interface FindView {
     int id();
 
     String content() default "";
+
+    int src ()  default 0;
 }
